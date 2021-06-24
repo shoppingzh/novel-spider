@@ -53,7 +53,7 @@ async function getBook(name, pageFn) {
       $(this).remove()
     })
     const data = $inner.text()
-    const stop = pageFn(data, i)
+    const stop = pageFn(data, i, pageCount)
     if (stop) break
   }
 }

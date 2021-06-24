@@ -46,15 +46,16 @@ async function getBook(name, pageFn) {
   if (!pageFn) return
   const pageCount = await getBookPageCount(name)
   for (let i = 1; i <= pageCount; i++) {
-    const html = await getBookPage(name, i)
-    const $ = cheerio.load(html)
-    const $inner = $($('.ddd')[0])
-    $inner.find('div,script').each(function() {
-      $(this).remove()
+    getBookPage(name, i).then(html => {
+      const $ = cheerio.load(html)
+      const $inner = $($('.ddd')[0])
+      $inner.find('div,script').each(function() {
+        $(this).remove()
+      })
+      const data = $inner.text()
+      const stop = pageFn(data, i, pageCount)
+      // if (stop) break
     })
-    const data = $inner.text()
-    const stop = pageFn(data, i, pageCount)
-    if (stop) break
   }
 }
 
